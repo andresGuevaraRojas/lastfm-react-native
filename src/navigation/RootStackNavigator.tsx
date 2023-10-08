@@ -16,8 +16,17 @@ const RootStack = createStackNavigator<RootStackParamList>();
 
 function RootStackNavigator() {
   return (
-    <RootStack.Navigator>
-      <RootStack.Screen name="Home" component={HomeScreen} />
+    <RootStack.Navigator
+      screenOptions={{
+        headerTintColor: 'white',
+        headerStyle: {backgroundColor: '#142036'},
+        headerShadowVisible: false,
+      }}>
+      <RootStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{title: 'Top Tracks', headerTitleStyle: {fontSize: 20}}}
+      />
       <RootStack.Screen name="Artist" component={ArtistScreen} />
       <RootStack.Screen name="Player" component={PlayerScreen} />
       <RootStack.Screen name="Profile" component={ProfileScreen} />

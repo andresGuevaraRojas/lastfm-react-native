@@ -1,30 +1,70 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View} from 'react-native';
-import {TopTracksResponse, getTopTracks} from '../services/lastFmService';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  StyleSheet,
+  View,
+  StatusBar,
+} from 'react-native';
+import {
+  TopTracks,
+  TopTracksTrack,
+  getTopTracks,
+} from '../services/lastFmService';
+import TopTracksListItem from '../components/TopTracksListITem';
 
 export default function HomeScreen() {
-  const [topTracks, setTopTracks] = useState<TopTracksResponse>({
+  const [topTracksResponse, setTopTracksResponse] = useState<TopTracks>({
     track: [],
     '@attr': {
       country: '',
-      page: 0,
+      page: 1,
       perPage: 0,
       totalPages: 0,
       total: 0,
     },
   });
 
+  const topTracks = topTracksResponse.track;
+
   useEffect(() => {
     async function fetchData() {
       const tracks = await getTopTracks();
-      setTopTracks(tracks);
+      setTopTracksResponse(tracks);
     }
     fetchData();
   }, []);
 
+  function renderItem({item}: ListRenderItemInfo<TopTracksTrack>) {
+    return (
+      <TopTracksListItem
+        track={item.name}
+        artist={item.artist.name}
+        mbid={item.mbid}
+      />
+    );
+  }
+
   return (
-    <View>
-      <Text>Home</Text>
+    <View style={styles.container}>
+      <StatusBar backgroundColor={'#142036'} />
+      <FlatList
+        contentContainerStyle={styles.list}
+        data={topTracks}
+        renderItem={renderItem}
+        keyExtractor={item => item.url}
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#142036',
+    paddingHorizontal: 16,
+  },
+  list: {
+    gap: 40,
+  },
+});
