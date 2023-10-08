@@ -41,12 +41,14 @@ export default function HomeScreen({navigation}: RootStackProps<'Home'>) {
     if (!item) {
       return;
     }
-    const picture = item.album.image.find(image => image.size === 'medium')?.[
-      '#text'
-    ];
+    const pictures = item.album.image.map(p => ({
+      size: p.size,
+      url: p['#text'],
+    }));
+
     navigation.navigate('TrackOptions', {
       id: item.mbid,
-      picture: picture,
+      pictures: pictures,
       track: item.name,
       artist: item.artist.name,
       artistId: item.artist.mbid,

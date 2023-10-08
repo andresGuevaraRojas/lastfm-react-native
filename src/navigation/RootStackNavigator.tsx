@@ -8,12 +8,12 @@ import TrackOptionsScreen from '../screens/TrackOptionsScreen';
 
 export type RootStackParamList = {
   Home: undefined;
-  Artist: {id: string};
+  Artist: {id: string; picture: string | undefined};
   Player: undefined;
   Profile: undefined;
   TrackOptions: {
     id: string;
-    picture: string | undefined;
+    pictures: {size: string; url: string}[];
     artist: string;
     artistId: string;
     track: string;
@@ -38,7 +38,11 @@ function RootStackNavigator() {
         component={HomeScreen}
         options={{title: 'Top Tracks', headerTitleStyle: {fontSize: 20}}}
       />
-      <RootStack.Screen name="Artist" component={ArtistScreen} />
+      <RootStack.Screen
+        name="Artist"
+        component={ArtistScreen}
+        options={{headerShown: false}}
+      />
       <RootStack.Screen name="Player" component={PlayerScreen} />
       <RootStack.Screen name="Profile" component={ProfileScreen} />
       <RootStack.Screen

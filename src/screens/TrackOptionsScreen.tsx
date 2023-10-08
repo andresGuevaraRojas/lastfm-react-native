@@ -14,14 +14,17 @@ export default function TrackOptionsScreen({
   route,
   navigation,
 }: RootStackProps<'TrackOptions'>) {
-  const {picture, track, artist, artistId} = route.params;
+  const {pictures, track, artist, artistId} = route.params;
+
+  const picture = pictures.find(p => p.size === 'medium');
 
   const onPressModal = () => {
     navigation.goBack();
   };
 
   const onPressSeeArtist = () => {
-    navigation.navigate('Artist', {id: artistId});
+    const largePicture = pictures.find(p => p.size === 'extralarge');
+    navigation.navigate('Artist', {id: artistId, picture: largePicture?.url});
   };
   return (
     <Pressable style={styles.wraper} onPress={onPressModal}>
@@ -31,7 +34,7 @@ export default function TrackOptionsScreen({
             style={styles.picture}
             source={
               picture
-                ? {uri: picture}
+                ? {uri: picture.url}
                 : require('../../assets/albumFallback.png')
             }
           />
