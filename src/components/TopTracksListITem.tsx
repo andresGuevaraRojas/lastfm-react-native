@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {TrackInfo, getTrackInfo} from '../services/lastFmService';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type Props = {
   track: string;
   artist: string;
   mbid: string;
+  onPressMenu: (trackInfo: TrackInfo | null) => void;
 };
-function TopTracksListItem({track, artist, mbid}: Props) {
+function TopTracksListItem({track, artist, mbid, onPressMenu}: Props) {
   const [info, setInfo] = useState<TrackInfo | null>(null);
 
   useEffect(() => {
@@ -33,10 +35,16 @@ function TopTracksListItem({track, artist, mbid}: Props) {
           picture ? {uri: picture} : require('../../assets/albumFallback.png')
         }
       />
-      <View>
+      <View style={styles.info}>
         <Text style={styles.trackName}>{track}</Text>
         <Text style={styles.artist}>{artist}</Text>
       </View>
+      <TouchableOpacity
+        onPress={() => {
+          onPressMenu(info);
+        }}>
+        <Icon name="ellipsis-horizontal" size={30} color={'white'} />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -58,6 +66,9 @@ const styles = StyleSheet.create({
   },
   artist: {
     color: 'rgba(255,255,255,0.7)',
+  },
+  info: {
+    flex: 1,
   },
 });
 export default TopTracksListItem;

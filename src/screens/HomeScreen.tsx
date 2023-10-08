@@ -9,11 +9,13 @@ import {
 import {
   TopTracks,
   TopTracksTrack,
+  TrackInfo,
   getTopTracks,
 } from '../services/lastFmService';
 import TopTracksListItem from '../components/TopTracksListITem';
+import {RootStackProps} from '../navigation/RootStackNavigator';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}: RootStackProps<'Home'>) {
   const [topTracksResponse, setTopTracksResponse] = useState<TopTracks>({
     track: [],
     '@attr': {
@@ -35,12 +37,29 @@ export default function HomeScreen() {
     fetchData();
   }, []);
 
+  const onPressMenuItem = (item: TrackInfo | null) => {
+    if (!item) {
+      return;
+    }
+    const picture = item.album.image.find(image => image.size === 'medium')?.[
+      '#text'
+    ];
+    navigation.navigate('TrackOptions', {
+      id: item.mbid,
+      picture: picture,
+      track: item.name,
+      artist: item.artist.name,
+      artistId: item.artist.mbid,
+    });
+  };
+
   function renderItem({item}: ListRenderItemInfo<TopTracksTrack>) {
     return (
       <TopTracksListItem
         track={item.name}
         artist={item.artist.name}
         mbid={item.mbid}
+        onPressMenu={onPressMenuItem}
       />
     );
   }

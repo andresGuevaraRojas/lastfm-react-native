@@ -1,18 +1,29 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, StackScreenProps} from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import ArtistScreen from '../screens/ArtistScreen';
 import PlayerScreen from '../screens/PlayerScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import TrackOptionsScreen from '../screens/TrackOptionsScreen';
 
 export type RootStackParamList = {
   Home: undefined;
-  Artist: undefined;
+  Artist: {id: string};
   Player: undefined;
   Profile: undefined;
+  TrackOptions: {
+    id: string;
+    picture: string | undefined;
+    artist: string;
+    artistId: string;
+    track: string;
+  };
 };
 
 const RootStack = createStackNavigator<RootStackParamList>();
+
+export type RootStackProps<T extends keyof RootStackParamList> =
+  StackScreenProps<RootStackParamList, T>;
 
 function RootStackNavigator() {
   return (
@@ -30,6 +41,11 @@ function RootStackNavigator() {
       <RootStack.Screen name="Artist" component={ArtistScreen} />
       <RootStack.Screen name="Player" component={PlayerScreen} />
       <RootStack.Screen name="Profile" component={ProfileScreen} />
+      <RootStack.Screen
+        name="TrackOptions"
+        component={TrackOptionsScreen}
+        options={{presentation: 'transparentModal', headerShown: false}}
+      />
     </RootStack.Navigator>
   );
 }

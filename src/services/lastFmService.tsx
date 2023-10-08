@@ -59,6 +59,11 @@ export type TrackInfo = {
   duration: number;
   listeners: number;
   playcount: number;
+  artist: {
+    name: string;
+    mbid: string;
+    url: string;
+  };
   album: {
     artist: string;
     title: string;
