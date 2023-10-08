@@ -5,10 +5,13 @@ import ArtistScreen from '../screens/ArtistScreen';
 import PlayerScreen from '../screens/PlayerScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TrackOptionsScreen from '../screens/TrackOptionsScreen';
+import FavoritesScreen from '../screens/FavortitesScreen';
+import {HomeHeaderRight} from '../components/HomeHeaderRight';
+import ProfileHeaderBackImage from '../components/ProfileHeaderBackImage';
 
 export type RootStackParamList = {
   Home: undefined;
-  Artist: {id: string; picture: string | undefined};
+  Artist: {id: string; pictures: {size: string; url: string}[]};
   Player: undefined;
   Profile: undefined;
   TrackOptions: {
@@ -18,6 +21,7 @@ export type RootStackParamList = {
     artistId: string;
     track: string;
   };
+  Favorites: undefined;
 };
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -36,7 +40,12 @@ function RootStackNavigator() {
       <RootStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{title: 'Top Tracks', headerTitleStyle: {fontSize: 20}}}
+        options={{
+          title: 'Top Tracks',
+          headerTitleStyle: {fontSize: 20},
+          headerRight: HomeHeaderRight,
+          headerRightContainerStyle: {paddingRight: 16},
+        }}
       />
       <RootStack.Screen
         name="Artist"
@@ -44,12 +53,22 @@ function RootStackNavigator() {
         options={{headerShown: false}}
       />
       <RootStack.Screen name="Player" component={PlayerScreen} />
-      <RootStack.Screen name="Profile" component={ProfileScreen} />
+      <RootStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          presentation: 'modal',
+          headerBackImage: ProfileHeaderBackImage,
+          headerTitle: '',
+          headerShadowVisible: false,
+        }}
+      />
       <RootStack.Screen
         name="TrackOptions"
         component={TrackOptionsScreen}
         options={{presentation: 'transparentModal', headerShown: false}}
       />
+      <RootStack.Screen name="Favorites" component={FavoritesScreen} />
     </RootStack.Navigator>
   );
 }

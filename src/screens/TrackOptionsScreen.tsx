@@ -23,8 +23,7 @@ export default function TrackOptionsScreen({
   };
 
   const onPressSeeArtist = () => {
-    const largePicture = pictures.find(p => p.size === 'extralarge');
-    navigation.navigate('Artist', {id: artistId, picture: largePicture?.url});
+    navigation.navigate('Artist', {id: artistId, pictures: pictures});
   };
   return (
     <Pressable style={styles.wraper} onPress={onPressModal}>

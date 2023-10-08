@@ -9,10 +9,20 @@ import {
 import {RootStackProps} from '../navigation/RootStackNavigator';
 import {ArtistInfo, getArtistInfo} from '../services/lastFmService';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useFavoritesStore} from '../store/artistsFavoritesStore';
+
 export default function ArtistScreen({route}: RootStackProps<'Artist'>) {
-  const {id, picture} = route.params;
+  const {id, pictures} = route.params;
 
   const [artist, setArtist] = useState<ArtistInfo | null>(null);
+  const addToFavorites = useFavoritesStore(state => state.addArtist);
+  const removeFromFavorites = useFavoritesStore(state => state.removeArtist);
+  const favorites = useFavoritesStore(state => state.artists);
+
+  const isFavorite = favorites.some(item => item.id === id);
+
+  const largePicture = pictures.find(p => p.size === 'extralarge');
+  const mediumPictute = pictures.find(p => p.size === 'medium');
 
   useEffect(() => {
     async function fetchData() {
@@ -22,12 +32,29 @@ export default function ArtistScreen({route}: RootStackProps<'Artist'>) {
     fetchData();
   }, [id]);
 
+  const onPressAddFavorite = () => {
+    if (!artist) {
+      return;
+    }
+    if (isFavorite) {
+      removeFromFavorites(artist.mbid);
+      return;
+    }
+    addToFavorites({
+      id: artist?.mbid,
+      name: artist?.name,
+      picture: mediumPictute?.url ?? '',
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
         style={styles.picture}
         source={
-          picture ? {uri: picture} : require('../../assets/albumFallback.png')
+          largePicture
+            ? {uri: largePicture.url}
+            : require('../../assets/albumFallback.png')
         }
         resizeMode="stretch">
         <View style={styles.imageContent}>
@@ -41,8 +68,14 @@ export default function ArtistScreen({route}: RootStackProps<'Artist'>) {
           </Text>
           <View style={styles.favorite}>
             <Text style={styles.addFavoriteText}>Add to favorites</Text>
-            <TouchableOpacity style={styles.addFavoriteButton}>
-              <Icon name="heart-outline" size={30} color={'white'} />
+            <TouchableOpacity
+              style={styles.addFavoriteButton}
+              onPress={onPressAddFavorite}>
+              {isFavorite ? (
+                <Icon name="heart" size={30} color={'red'} />
+              ) : (
+                <Icon name="heart-outline" size={30} color={'white'} />
+              )}
             </TouchableOpacity>
           </View>
         </View>
