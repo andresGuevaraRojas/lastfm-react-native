@@ -2,7 +2,7 @@ import Config from 'react-native-config';
 
 export type TopTracksTrack = {
   name: string;
-  duration: number;
+  duration: string;
   listeners: number;
   mbid: string;
   url: string;

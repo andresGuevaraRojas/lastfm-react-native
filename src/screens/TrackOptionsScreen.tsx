@@ -1,14 +1,7 @@
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Pressable,
-} from 'react-native';
+import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
 import {RootStackProps} from '../navigation/RootStackNavigator';
-import Icon from 'react-native-vector-icons/Ionicons';
+import MenuOption from '../components/MenuOption';
 
 export default function TrackOptionsScreen({
   route,
@@ -25,6 +18,7 @@ export default function TrackOptionsScreen({
   const onPressSeeArtist = () => {
     navigation.navigate('Artist', {id: artistId, pictures: pictures});
   };
+
   return (
     <Pressable style={styles.wraper} onPress={onPressModal}>
       <View style={styles.container}>
@@ -44,10 +38,13 @@ export default function TrackOptionsScreen({
           <View />
         </View>
         <View style={styles.options}>
-          <TouchableOpacity style={styles.option} onPress={onPressSeeArtist}>
-            <Icon name="person-outline" size={30} color={'#142036'} />
-            <Text style={styles.optionText}>Ver artista</Text>
-          </TouchableOpacity>
+          <MenuOption
+            iconName="person-outline"
+            iconSize={30}
+            iconColor="#142036"
+            text="See artist"
+            onPress={onPressSeeArtist}
+          />
         </View>
       </View>
     </Pressable>

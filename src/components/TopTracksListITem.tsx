@@ -8,8 +8,9 @@ type Props = {
   artist: string;
   mbid: string;
   onPressMenu: (trackInfo: TrackInfo | null) => void;
+  onPress: (trackInfo: TrackInfo | null) => void;
 };
-function TopTracksListItem({track, artist, mbid, onPressMenu}: Props) {
+function TopTracksListItem({track, artist, mbid, onPressMenu, onPress}: Props) {
   const [info, setInfo] = useState<TrackInfo | null>(null);
 
   useEffect(() => {
@@ -28,7 +29,11 @@ function TopTracksListItem({track, artist, mbid, onPressMenu}: Props) {
   ];
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        onPress(info);
+      }}>
       <Image
         style={styles.image}
         source={
@@ -45,7 +50,7 @@ function TopTracksListItem({track, artist, mbid, onPressMenu}: Props) {
         }}>
         <Icon name="ellipsis-horizontal" size={30} color={'white'} />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({

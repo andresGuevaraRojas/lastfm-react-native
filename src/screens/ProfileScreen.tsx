@@ -1,14 +1,16 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {StyleSheet, Text, View} from 'react-native';
 import {RootStackProps} from '../navigation/RootStackNavigator';
+import MenuOption from '../components/MenuOption';
 
 export default function ProfileScreen({navigation}: RootStackProps<'Profile'>) {
   const onPressFavoritesOption = () => {
     navigation.navigate('Favorites');
   };
 
-  const onPressHistoryOption = () => {};
+  const onPressHistoryOption = () => {
+    navigation.navigate('History');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.userContainer}>
@@ -20,34 +22,25 @@ export default function ProfileScreen({navigation}: RootStackProps<'Profile'>) {
           <Text style={styles.userName}>@user</Text>
         </View>
       </View>
-      <OptionItem
+      <MenuOption
         iconName="heart"
+        iconSize={24}
+        iconColor="white"
         text="Favorites artists"
         onPress={onPressFavoritesOption}
+        style={styles.optionContainer}
+        textStyle={styles.optionText}
       />
-      <OptionItem
+      <MenuOption
         iconName="time-outline"
-        text="Reproduction history"
+        iconSize={24}
+        iconColor="white"
+        text="Listening history"
         onPress={onPressHistoryOption}
+        style={styles.optionContainer}
+        textStyle={styles.optionText}
       />
     </View>
-  );
-}
-
-function OptionItem({
-  iconName,
-  text,
-  onPress,
-}: {
-  iconName: string;
-  text: string;
-  onPress: () => void;
-}) {
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.optionContainer}>
-      <Icon name={iconName} size={24} color={'white'} />
-      <Text style={styles.optionText}>{text}</Text>
-    </TouchableOpacity>
   );
 }
 

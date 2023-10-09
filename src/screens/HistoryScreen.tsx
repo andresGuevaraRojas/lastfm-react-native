@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -6,28 +6,19 @@ import {
   View,
   StatusBar,
 } from 'react-native';
-import {
-  TopTracksTrack,
-  TrackInfo,
-  getTopTracks,
-} from '../services/lastFmService';
+import {TopTracksTrack, TrackInfo} from '../services/lastFmService';
 import TopTracksListItem from '../components/TopTracksListITem';
 import {RootStackProps} from '../navigation/RootStackNavigator';
 import {useTracksStore} from '../store/tracksStore';
 
-export default function HomeScreen({navigation}: RootStackProps<'Home'>) {
-  const setTracks = useTracksStore(store => store.setTracks);
+export default function HistoryScreen({navigation}: RootStackProps<'History'>) {
+  const topTracks = useTracksStore(store => store.tracks);
+  const historyTracksId = useTracksStore(
+    store => store.historyPlayedTracksIndex,
+  );
   const setPlayingTrack = useTracksStore(store => store.setPlayingTrack);
   const setIsPlaying = useTracksStore(store => store.setIsPlaying);
-  const topTracks = useTracksStore(store => store.tracks);
-
-  useEffect(() => {
-    async function fetchData() {
-      const tracks = await getTopTracks();
-      setTracks(tracks.track);
-    }
-    fetchData();
-  }, [setTracks]);
+  const historyTracks = historyTracksId.map(index => topTracks[index]);
 
   const onPressMenuItem = (item: TrackInfo | null) => {
     if (!item) {
@@ -47,20 +38,23 @@ export default function HomeScreen({navigation}: RootStackProps<'Home'>) {
     });
   };
 
-  const onPressItem = (index: number) => {
-    setPlayingTrack(index, true);
+  const onPressItem = (item: TrackInfo | null) => {
+    const indexOnTrackList = topTracks.findIndex(
+      topTrack => topTrack.url === item?.url,
+    );
+    setPlayingTrack(indexOnTrackList);
     setIsPlaying(true);
   };
 
-  function renderItem({item, index}: ListRenderItemInfo<TopTracksTrack>) {
+  function renderItem({item}: ListRenderItemInfo<TopTracksTrack>) {
     return (
       <TopTracksListItem
         track={item.name}
         artist={item.artist.name}
         mbid={item.mbid}
         onPressMenu={onPressMenuItem}
-        onPress={_ => {
-          onPressItem(index);
+        onPress={itemTrack => {
+          onPressItem(itemTrack);
         }}
       />
     );
@@ -71,9 +65,9 @@ export default function HomeScreen({navigation}: RootStackProps<'Home'>) {
       <StatusBar backgroundColor={'#142036'} />
       <FlatList
         contentContainerStyle={styles.list}
-        data={topTracks}
+        data={historyTracks}
         renderItem={renderItem}
-        keyExtractor={item => item.url}
+        keyExtractor={(item, index) => `${item.url}-${index}`}
       />
     </View>
   );
