@@ -4,13 +4,19 @@ import {useTracksStore} from '../store/tracksStore';
 import PlayerControl from './PlayerControl';
 import {TrackInfo, getTrackInfo} from '../services/lastFmService';
 import {Slider} from '@miblanchard/react-native-slider';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/RootStackNavigator';
 
 export default function Player() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const tracks = useTracksStore(store => store.tracks);
   const currentTrackIndex = useTracksStore(store => store.playingTrackIndex);
   const setCurrentTrackIndex = useTracksStore(store => store.setPlayingTrack);
   const isPlaying = useTracksStore(store => store.isPlaying);
   const setIsPlaying = useTracksStore(store => store.setIsPlaying);
+  const showPlayer = useTracksStore(store => store.showPlayer);
+  const setShowPlayer = useTracksStore(store => store.setShowPlayer);
 
   const track = tracks[currentTrackIndex];
   const [info, setInfo] = useState<TrackInfo | null>(null);
@@ -37,7 +43,7 @@ export default function Player() {
     fetchData();
   }, [currentTrackIndex, track]);
 
-  if (currentTrackIndex < 0) {
+  if (currentTrackIndex < 0 || !showPlayer) {
     return null;
   }
 
@@ -65,10 +71,15 @@ export default function Player() {
     setIsPlaying(!isPlaying);
   };
 
+  const onPressPlayer = () => {
+    setShowPlayer(false);
+    navigation.navigate('Player');
+  };
+
   const duration = Number.parseInt(track.duration, 10);
 
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} onPress={onPressPlayer}>
       <View style={styles.trackContainer}>
         <Image
           style={styles.picture}

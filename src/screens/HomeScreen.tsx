@@ -20,6 +20,7 @@ export default function HomeScreen({navigation}: RootStackProps<'Home'>) {
   const setPlayingTrack = useTracksStore(store => store.setPlayingTrack);
   const setIsPlaying = useTracksStore(store => store.setIsPlaying);
   const topTracks = useTracksStore(store => store.tracks);
+  const setShowPlayer = useTracksStore(store => store.setShowPlayer);
 
   useEffect(() => {
     async function fetchData() {
@@ -50,6 +51,7 @@ export default function HomeScreen({navigation}: RootStackProps<'Home'>) {
   const onPressItem = (index: number) => {
     setPlayingTrack(index, true);
     setIsPlaying(true);
+    setShowPlayer(true);
   };
 
   function renderItem({item, index}: ListRenderItemInfo<TopTracksTrack>) {

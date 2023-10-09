@@ -19,6 +19,7 @@ export default function HistoryScreen({navigation}: RootStackProps<'History'>) {
   const setPlayingTrack = useTracksStore(store => store.setPlayingTrack);
   const setIsPlaying = useTracksStore(store => store.setIsPlaying);
   const historyTracks = historyTracksId.map(index => topTracks[index]);
+  const setShowPlayer = useTracksStore(store => store.setShowPlayer);
 
   const onPressMenuItem = (item: TrackInfo | null) => {
     if (!item) {
@@ -44,6 +45,7 @@ export default function HistoryScreen({navigation}: RootStackProps<'History'>) {
     );
     setPlayingTrack(indexOnTrackList);
     setIsPlaying(true);
+    setShowPlayer(true);
   };
 
   function renderItem({item}: ListRenderItemInfo<TopTracksTrack>) {

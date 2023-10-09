@@ -56,7 +56,14 @@ function RootStackNavigator() {
           component={ArtistScreen}
           options={{headerShown: false}}
         />
-        <RootStack.Screen name="Player" component={PlayerScreen} />
+        <RootStack.Screen
+          name="Player"
+          component={PlayerScreen}
+          options={{
+            presentation: 'transparentModal',
+            headerShadowVisible: false,
+          }}
+        />
         <RootStack.Screen
           name="Profile"
           component={ProfileScreen}

@@ -11,6 +11,8 @@ export interface Tracks {
   historyPlayedTracksIndex: number[];
   isPlaying: boolean;
   setIsPlaying: (isPlaying: boolean) => void;
+  showPlayer: boolean;
+  setShowPlayer: (show: boolean) => void;
 }
 export const useTracksStore = create<Tracks>()(
   persist(
@@ -19,6 +21,7 @@ export const useTracksStore = create<Tracks>()(
       playingTrackIndex: -1,
       historyPlayedTracksIndex: [],
       isPlaying: false,
+      showPlayer: false,
       setTracks: tracks => set({tracks: tracks}),
       setPlayingTrack: (index, includeToHistory) =>
         set(_ => {
@@ -34,6 +37,7 @@ export const useTracksStore = create<Tracks>()(
           return {playingTrackIndex: index};
         }),
       setIsPlaying: isPlaying => set({isPlaying: isPlaying}),
+      setShowPlayer: show => set({showPlayer: show}),
     }),
     {
       name: 'history-storage',
